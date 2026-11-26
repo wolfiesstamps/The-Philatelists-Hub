@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,6 +24,7 @@ h1 {
   font-size: 27px;
   margin: 10px 0;
 }
+h2 { color: #D4AF37; }
 p { margin: 5px 0; }
 .logo {
   width: 75px;
@@ -34,7 +34,7 @@ p { margin: 5px 0; }
 main {
   max-width: 650px;
   margin: auto;
-  padding: 18px 12px 100px;
+  padding: 18px 12px 110px;
 }
 .welcome {
   text-align: center;
@@ -70,7 +70,7 @@ button {
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-button:focus-visible {
+:focus-visible {
   outline: 3px solid white;
   outline-offset: 3px;
 }
@@ -90,16 +90,81 @@ nav button {
   padding: 18px 2px;
   font-size: 14px;
 }
+[hidden] { display: none !important; }
+.panel {
+  background: #20543D;
+  border: 1px solid #D4AF37;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 15px;
+}
+label {
+  display: block;
+  font-weight: bold;
+  margin-top: 15px;
+}
+input, select, textarea {
+  width: 100%;
+  padding: 12px;
+  margin: 6px 0;
+  border: 2px solid #D4AF37;
+  border-radius: 8px;
+  background: #FFF8E7;
+  color: #123D2B;
+  font: inherit;
+  min-height: 48px;
+}
+textarea { min-height: 100px; }
+.action {
+  width: 100%;
+  padding: 14px;
+  margin-top: 12px;
+  background: #D4AF37;
+  color: #123D2B;
+  border: none;
+  border-radius: 8px;
+  font-size: 17px;
+  font-weight: bold;
+}
+.secondary {
+  background: #20543D;
+  color: #FFF8E7;
+  border: 1px solid #D4AF37;
+}
+.stamp-card {
+  background: #20543D;
+  border: 1px solid #D4AF37;
+  border-radius: 12px;
+  padding: 15px;
+  margin: 15px 0;
+  overflow-wrap: anywhere;
+}
+.stamp-card img, #photoPreview {
+  display: block;
+  max-width: 100%;
+  max-height: 240px;
+  object-fit: contain;
+  margin: 10px auto;
+  border-radius: 5px;
+}
+.delete {
+  background: #842E35;
+  color: white;
+  border: 1px solid white;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 16px;
+  margin-top: 12px;
+}
 #message {
   text-align: center;
   padding: 12px;
-  color: #FFF8E7;
 }
 </style>
 </head>
 <body>
 <header>
-<svg class="logo" viewBox="0 0 100 110">
+<svg class="logo" viewBox="0 0 100 110" aria-hidden="true">
 <rect x="13" y="9" width="74" height="92"
 rx="3" fill="none" stroke="currentColor"
 stroke-width="3" stroke-dasharray="3 5"/>
@@ -116,20 +181,92 @@ stroke="currentColor" stroke-width="2"/>
 <h1>The Philatelists' Hub</h1>
 <p>The friendly home for stamp collectors.</p>
 </header>
+
 <main>
+<section id="homePage">
 <div class="welcome">
 <h2>Welcome, Collector!</h2>
 <p>Explore, collect and connect.</p>
 </div>
 <div class="menu" id="menu"></div>
+</section>
+
+<section id="collectionPage" hidden>
+<h2 tabindex="-1">My Collection</h2>
+<p id="stampCount"></p>
+<button class="action" onclick="showPage('addPage')">
++ Add a Stamp
+</button>
+<div id="stampList"></div>
+<button class="action secondary" onclick="home()">
+Back to Home
+</button>
+</section>
+
+<section id="addPage" hidden>
+<h2 tabindex="-1">Add a Stamp</h2>
+<div class="panel">
+<form id="stampForm">
+
+<label for="stampName">Stamp name (required)</label>
+<input id="stampName" required maxlength="150"
+placeholder="e.g. Penny Black">
+
+<label for="country">Country (required)</label>
+<input id="country" required maxlength="100"
+placeholder="e.g. Great Britain">
+
+<label for="year">Year</label>
+<input id="year" type="number"
+min="1840" max="9999"
+placeholder="e.g. 1840">
+
+<label for="value">Face value</label>
+<input id="value" maxlength="80"
+placeholder="e.g. 1 penny">
+
+<label for="condition">Condition</label>
+<select id="condition">
+<option>Not sure</option>
+<option>Mint</option>
+<option>Used</option>
+<option>Cancelled to order</option>
+<option>Damaged</option>
+</select>
+
+<label for="catalogue">Catalogue number</label>
+<input id="catalogue" maxlength="100"
+placeholder="Optional">
+
+<label for="notes">Notes</label>
+<textarea id="notes" maxlength="2000"
+placeholder="Anything you know about this stamp"></textarea>
+
+<label for="photo">Stamp photograph</label>
+<input id="photo" type="file" accept="image/*">
+<img id="photoPreview" alt="Selected stamp photograph" hidden>
+
+<button id="saveButton" class="action" type="submit">
+Save Stamp
+</button>
+</form>
+</div>
+<button class="action secondary"
+onclick="showPage('collectionPage')">
+Back to My Collection
+</button>
+</section>
+
 <p id="message" role="status"></p>
 </main>
+
 <nav aria-label="Main navigation">
 <button onclick="home()">Home</button>
-<button onclick="soon('My Collection')">Collection</button>
+<button onclick="showPage('collectionPage')">Collection</button>
 <button onclick="soon('Community')">Community</button>
 <button onclick="soon('Settings')">Settings</button>
 </nav>
+
 <script>
 const items = [
 ["My Collection", '<path d="M12 5v16M3 4h5l4 2 4-2h5v15h-5l-4 2-4-2H3z"/>'],
@@ -143,6 +280,24 @@ const items = [
 ["My Statistics", '<path d="M3 3v18h18M7 17v-5M12 17V8M17 17V4"/>'],
 ["Settings", '<circle cx="12" cy="12" r="4"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l3 3M16 16l3 3M5 19l3-3M16 8l3-3"/>']
 ];
+
+const get = id => document.getElementById(id);
+const storageKey = "philatelistsHubCollection";
+let stamps = [];
+let storageReady = true;
+let photoData = "";
+let photoVersion = 0;
+
+try {
+  const saved = JSON.parse(localStorage.getItem(storageKey) || "[]");
+  if (!Array.isArray(saved)) throw new Error();
+  stamps = saved;
+} catch (error) {
+  storageReady = false;
+  get("message").textContent =
+    "Saved collection could not be loaded. Please check browser storage.";
+}
+
 items.forEach(([name, drawing]) => {
   const button = document.createElement("button");
   button.className = "tile";
@@ -150,15 +305,208 @@ items.forEach(([name, drawing]) => {
     '<svg viewBox="0 0 24 24" aria-hidden="true">'
     + drawing + '</svg>';
   button.append(document.createTextNode(name));
-  button.onclick = () => soon(name);
-  document.getElementById("menu").appendChild(button);
+  button.onclick = () => {
+    if (name === "My Collection") {
+      showPage("collectionPage");
+    } else if (name === "Add Stamps") {
+      showPage("addPage");
+    } else {
+      soon(name);
+    }
+  };
+  get("menu").appendChild(button);
 });
+
+function showPage(page) {
+  ["homePage", "collectionPage", "addPage"].forEach(id => {
+    get(id).hidden = id !== page;
+  });
+  get("message").textContent = "";
+  if (page === "collectionPage") renderCollection();
+  if (!storageReady) {
+    get("message").textContent =
+      "Collection storage is unavailable.";
+  }
+  const heading = get(page).querySelector("h2");
+  heading.setAttribute("tabindex", "-1");
+  heading.focus();
+  window.scrollTo(0, 0);
+}
+
+function home() {
+  showPage("homePage");
+}
+
 function soon(name) {
   alert(name + " — Coming soon!");
 }
-function home() {
-  window.scrollTo(0, 0);
+
+function saveCollection(updated) {
+  if (!storageReady) {
+    alert("Collection storage is unavailable.");
+    return false;
+  }
+  try {
+    localStorage.setItem(storageKey, JSON.stringify(updated));
+    stamps = updated;
+    return true;
+  } catch (error) {
+    alert("Unable to save. Your browser storage may be full or unavailable.");
+    return false;
+  }
+}
+
+get("photo").addEventListener("change", function() {
+  const version = ++photoVersion;
+  const file = this.files[0];
+  photoData = "";
+  get("photoPreview").hidden = true;
+  get("photoPreview").removeAttribute("src");
+  get("saveButton").disabled = false;
+  if (!file) return;
+
+  get("saveButton").disabled = true;
+  const reader = new FileReader();
+
+  function failed() {
+    if (version !== photoVersion) return;
+    get("photo").value = "";
+    get("saveButton").disabled = false;
+    alert("Unable to open this photo. Please try another.");
+  }
+
+  reader.onerror = failed;
+  reader.onload = function() {
+    const image = new Image();
+    image.onerror = failed;
+    image.onload = function() {
+      if (version !== photoVersion) return;
+      try {
+        const scale = Math.min(
+          1, 800 / Math.max(image.width, image.height)
+        );
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.max(1, Math.round(image.width * scale));
+        canvas.height = Math.max(1, Math.round(image.height * scale));
+        const ctx = canvas.getContext("2d");
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+        photoData = canvas.toDataURL("image/jpeg", 0.75);
+        get("photoPreview").src = photoData;
+        get("photoPreview").hidden = false;
+        get("saveButton").disabled = false;
+      } catch (error) {
+        failed();
+      }
+    };
+    image.src = reader.result;
+  };
+  reader.readAsDataURL(file);
+});
+
+get("stampForm").addEventListener("submit", function(event) {
+  event.preventDefault();
+  if (get("saveButton").disabled) return;
+
+  const name = get("stampName").value.trim();
+  const country = get("country").value.trim();
+
+  if (!name || !country) {
+    alert("Please enter a stamp name and country.");
+    return;
+  }
+
+  const stamp = {
+    id: Date.now().toString() + Math.random().toString(36).slice(2),
+    name: name,
+    country: country,
+    year: get("year").value,
+    value: get("value").value.trim(),
+    condition: get("condition").value,
+    catalogue: get("catalogue").value.trim(),
+    notes: get("notes").value.trim(),
+    photo: photoData
+  };
+
+  if (!saveCollection([...stamps, stamp])) return;
+
+  this.reset();
+  photoVersion++;
+  photoData = "";
+  get("photoPreview").hidden = true;
+  get("photoPreview").removeAttribute("src");
+  showPage("collectionPage");
+  get("message").textContent = "Stamp saved successfully!";
+});
+
+function renderCollection() {
+  const list = get("stampList");
+  list.replaceChildren();
+
+  get("stampCount").textContent =
+    "You have " + stamps.length +
+    (stamps.length === 1 ? " stamp" : " stamps") +
+    " in your collection.";
+
+  if (stamps.length === 0) {
+    const empty = document.createElement("p");
+    empty.textContent =
+      "Your collection is empty. Add your first stamp to get started!";
+    list.appendChild(empty);
+    return;
+  }
+
+  stamps.slice().reverse().forEach(stamp => {
+    const card = document.createElement("article");
+    card.className = "stamp-card";
+
+    if (stamp.photo && stamp.photo.startsWith("data:image/jpeg;")) {
+      const image = document.createElement("img");
+      image.src = stamp.photo;
+      image.alt = stamp.name + " stamp";
+      card.appendChild(image);
+    }
+
+    const heading = document.createElement("h3");
+    heading.textContent = stamp.name;
+    card.appendChild(heading);
+
+    const details = [
+      ["Country", stamp.country],
+      ["Year", stamp.year],
+      ["Face value", stamp.value],
+      ["Condition", stamp.condition],
+      ["Catalogue number", stamp.catalogue],
+      ["Notes", stamp.notes]
+    ];
+
+    details.forEach(([label, value]) => {
+      if (!value) return;
+      const paragraph = document.createElement("p");
+      const title = document.createElement("strong");
+      title.textContent = label + ": ";
+      paragraph.append(title, document.createTextNode(value));
+      card.appendChild(paragraph);
+    });
+
+    const remove = document.createElement("button");
+    remove.className = "delete";
+    remove.textContent = "Delete Stamp";
+    remove.setAttribute("aria-label", "Delete " + stamp.name);
+    remove.onclick = () => {
+      if (confirm("Delete " + stamp.name + " from your collection?")) {
+        if (saveCollection(stamps.filter(s => s.id !== stamp.id))) {
+          renderCollection();
+          get("message").textContent = "Stamp deleted.";
+          get("collectionPage").querySelector("h2").focus();
+        }
+      }
+    };
+    card.appendChild(remove);
+    list.appendChild(card);
+  });
 }
 </script>
 </body>
-</html>
+  </html>
