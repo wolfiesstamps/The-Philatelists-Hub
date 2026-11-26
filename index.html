@@ -1,0 +1,164 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#123D2B">
+<title>The Philatelists' Hub</title>
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #123D2B;
+  color: #FFF8E7;
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+}
+header {
+  text-align: center;
+  padding: 25px 12px;
+  border-bottom: 2px solid #D4AF37;
+}
+h1 {
+  color: #D4AF37;
+  font-size: 27px;
+  margin: 10px 0;
+}
+p { margin: 5px 0; }
+.logo {
+  width: 75px;
+  height: 90px;
+  color: #D4AF37;
+}
+main {
+  max-width: 650px;
+  margin: auto;
+  padding: 18px 12px 100px;
+}
+.welcome {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.menu {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+.tile {
+  background: #20543D;
+  border: 1px solid #D4AF37;
+  border-radius: 12px;
+  color: #FFF8E7;
+  padding: 18px 8px;
+  min-height: 125px;
+  font-size: 17px;
+  font-weight: bold;
+}
+.tile svg {
+  display: block;
+  width: 36px;
+  height: 36px;
+  margin: 0 auto 10px;
+  stroke: #D4AF37;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+button:focus-visible {
+  outline: 3px solid white;
+  outline-offset: 3px;
+}
+nav {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  background: #123D2B;
+  border-top: 2px solid #D4AF37;
+}
+nav button {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #FFF8E7;
+  padding: 18px 2px;
+  font-size: 14px;
+}
+#message {
+  text-align: center;
+  padding: 12px;
+  color: #FFF8E7;
+}
+</style>
+</head>
+<body>
+<header>
+<svg class="logo" viewBox="0 0 100 110">
+<rect x="13" y="9" width="74" height="92"
+rx="3" fill="none" stroke="currentColor"
+stroke-width="3" stroke-dasharray="3 5"/>
+<rect x="22" y="18" width="56" height="74"
+fill="none" stroke="currentColor"
+stroke-width="2"/>
+<circle cx="60" cy="35" r="8"
+fill="currentColor"/>
+<path d="M27 73 L43 47 L57 65 L65 54 L73 73 Z"
+fill="currentColor"/>
+<path d="M30 82 H70"
+stroke="currentColor" stroke-width="2"/>
+</svg>
+<h1>The Philatelists' Hub</h1>
+<p>The friendly home for stamp collectors.</p>
+</header>
+<main>
+<div class="welcome">
+<h2>Welcome, Collector!</h2>
+<p>Explore, collect and connect.</p>
+</div>
+<div class="menu" id="menu"></div>
+<p id="message" role="status"></p>
+</main>
+<nav aria-label="Main navigation">
+<button onclick="home()">Home</button>
+<button onclick="soon('My Collection')">Collection</button>
+<button onclick="soon('Community')">Community</button>
+<button onclick="soon('Settings')">Settings</button>
+</nav>
+<script>
+const items = [
+["My Collection", '<path d="M12 5v16M3 4h5l4 2 4-2h5v15h-5l-4 2-4-2H3z"/>'],
+["Find a Stamp", '<circle cx="10" cy="10" r="6"/><path d="m15 15 6 6"/>'],
+["Add Stamps", '<rect x="3" y="6" width="18" height="15" rx="2"/><circle cx="12" cy="13" r="4"/><path d="m7 6 2-3h6l2 3"/>'],
+["Browse by Country", '<circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/>'],
+["Browse by Year", '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 2v6M17 2v6M3 10h18"/>'],
+["My Wishlist", '<path d="M12 21 4 13C-3 5 8 0 12 8c4-8 15-3 8 5z"/>'],
+["Community", '<circle cx="9" cy="7" r="4"/><path d="M2 21v-3a7 7 0 0 1 14 0v3M17 3a4 4 0 0 1 0 8M18 14a6 6 0 0 1 4 6"/>'],
+["Chat & Share", '<path d="M3 3h18v14H9l-6 5zM7 8h10M7 12h7"/>'],
+["My Statistics", '<path d="M3 3v18h18M7 17v-5M12 17V8M17 17V4"/>'],
+["Settings", '<circle cx="12" cy="12" r="4"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l3 3M16 16l3 3M5 19l3-3M16 8l3-3"/>']
+];
+items.forEach(([name, drawing]) => {
+  const button = document.createElement("button");
+  button.className = "tile";
+  button.innerHTML =
+    '<svg viewBox="0 0 24 24" aria-hidden="true">'
+    + drawing + '</svg>';
+  button.append(document.createTextNode(name));
+  button.onclick = () => soon(name);
+  document.getElementById("menu").appendChild(button);
+});
+function soon(name) {
+  alert(name + " — Coming soon!");
+}
+function home() {
+  window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>
